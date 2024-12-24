@@ -1,17 +1,17 @@
-import { EventForm } from "@/components/forms/EventForm"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { db } from "@/drizzle/db"
-import { auth } from "@clerk/nextjs/server"
-import { notFound } from "next/navigation"
+import { EventForm } from "@/components/forms/EventForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { db } from "@/drizzle/db";
+import { auth } from "@clerk/nextjs/server";
+import { notFound } from "next/navigation";
 
-export const revalidate = 0
+export const revalidate = 0;
 
 export default async function EditEventPage({
-  params,
+  params: promiseParams,
 }: {
-  params: Record<string, string>
+  params: Promise<{ eventId: string }>;
 }) {
-  const { eventId } = params;
+  const { eventId } = await promiseParams; // Resolve the promise for params
 
   const { userId, redirectToSignIn } = await auth();
   if (userId == null) return redirectToSignIn();
