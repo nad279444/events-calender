@@ -7,19 +7,21 @@ import { notFound } from "next/navigation"
 export const revalidate = 0
 
 export default async function EditEventPage({
-  params: { eventId },
+  params,
 }: {
-  params: { eventId: string }
+  params: Record<string, string>
 }) {
-  const { userId, redirectToSignIn } = await auth()
-  if (userId == null) return redirectToSignIn()
+  const { eventId } = params;
+
+  const { userId, redirectToSignIn } = await auth();
+  if (userId == null) return redirectToSignIn();
 
   const event = await db.query.EventTable.findFirst({
     where: ({ id, clerkUserId }, { and, eq }) =>
       and(eq(clerkUserId, userId), eq(id, eventId)),
-  })
+  });
 
-  if (event == null) return notFound()
+  if (event == null) return notFound();
 
   return (
     <Card className="max-w-md mx-auto">
@@ -32,5 +34,5 @@ export default async function EditEventPage({
         />
       </CardContent>
     </Card>
-  )
+  );
 }
