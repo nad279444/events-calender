@@ -6,13 +6,12 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 0;
 
-// @ts-expect-error Type mismatch for params
 export default async function EditEventPage({
   params,
 }: {
-  params: { eventId: string };
+  params: Promise<{ eventId: string }>;
 }) {
-  const { eventId } = params; // Direct access to eventId
+  const { eventId } =  await params; // Direct access to eventId
 
   const { userId, redirectToSignIn } = await auth();
   if (userId == null) return redirectToSignIn();
